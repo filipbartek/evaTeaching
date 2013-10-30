@@ -1,5 +1,5 @@
-binPacking/
-nbproject/
-build/
-build.xml
-manifest.mf
+/binPacking/
+/nbproject/
+/build/
+/build.xml
+/manifest.mf
