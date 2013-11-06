@@ -18,9 +18,6 @@ import java.util.Vector;
 
 public class Hromadky {
 
-    /**
-     * @param args
-     */
     static int maxGen;
     static int popSize;
     static String logFilePrefix;
@@ -39,6 +36,10 @@ public class Hromadky {
     private static String detailsLogPrefix;
     private static String enableDetailsLog;
     private static Properties prop;
+
+    /**
+     * @param args
+     */
 
     public static void main(String[] args) {
 
@@ -112,6 +113,8 @@ public class Hromadky {
 
             DetailsLogger.startNewLog(detailsLogPrefix + "." + number + ".xml");
             DetailsLogger.logParams(prop);
+
+            RandomNumberGenerator.getInstance().reseed(number);
 
             Individual sampleIndividual = new IntegerIndividual(weights.size(), 0, K);
 
