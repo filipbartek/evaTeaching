@@ -58,7 +58,8 @@ public class PrisonerDilemma {
                     String str1 = "";
                     String str2 = "";
 
-                    int stop = RandomNumberGenerator.getInstance().nextInt(101) + 200;
+                    //int stop = RandomNumberGenerator.getInstance().nextInt(101) + 200;
+                    int stop = 200;
                     for (int m = 0; m < stop; m++) {
 
                         Move s1Move = s1.nextMove();
