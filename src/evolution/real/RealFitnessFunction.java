@@ -1,13 +1,14 @@
-package evolution.cv6;
+package evolution.real;
 
 import evolution.FitnessFunction;
 import evolution.individuals.Individual;
 import evolution.individuals.RealIndividual;
+import evolution.real.functions.RealFunction;
 
 public class RealFitnessFunction implements FitnessFunction {
 
     private static final long serialVersionUID = 2274261765244005248L;
-    evolution.cv6.RealFunction rf;
+    RealFunction rf;
 
     public RealFitnessFunction(RealFunction rf) {
         this.rf = rf;
@@ -17,8 +18,8 @@ public class RealFitnessFunction implements FitnessFunction {
 
         RealIndividual ri = (RealIndividual) aSubject;
         //do not change these two lines
-        double value = rf.value(ri.toDoubleArray());
-        ri.setObjectiveValue(value);
+        double value = rf.evaluate(ri.toDoubleArray());
+        ri.setObjectiveValue(-rf.getFopt() - value);
 
         return value;
     }
