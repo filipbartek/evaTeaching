@@ -10,7 +10,7 @@ public class PrisonerDilemma {
     public static void main(String[] args) {
 
         //change this to wherever your .class files are
-        File dir = new File("out/production/evaTeaching/evolution/prisoner/strategies/");
+        File dir = new File("build/classes/evolution/prisoner/strategies/");
 
         String[] stratNames = dir.list();
 
