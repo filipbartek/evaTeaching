@@ -44,8 +44,8 @@ public class PrisonerDilemma {
             for (int i = 0; i < strategies.length; i++) {
                 for (int j = 0; j < strategies.length; j++) {
 
-                    if (i == j)
-                        continue;
+                    //if (i == j)
+                        //continue;
 
                     Strategy s1 = strategies[i];
                     Strategy s2 = strategies[j];
