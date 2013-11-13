@@ -1,6 +1,7 @@
 binPacking/
 nbproject/
 build/
+real/
 sga/
 build.xml
 manifest.mf
