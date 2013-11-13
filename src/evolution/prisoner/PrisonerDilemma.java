@@ -39,6 +39,8 @@ public class PrisonerDilemma {
         int[] scores = new int[strategies.length];
 
         for (int r = 0; r < 10; r++) {
+            RandomNumberGenerator.getInstance().reseed(r);
+
             for (int i = 0; i < strategies.length; i++) {
                 for (int j = 0; j < strategies.length; j++) {
 
