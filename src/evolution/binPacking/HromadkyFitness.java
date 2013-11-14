@@ -36,8 +36,8 @@ public class HromadkyFitness implements FitnessFunction {
 
         int[] binWeights = getBinWeights(ind);
 
-        double min = Integer.MAX_VALUE;
-        double max = Integer.MIN_VALUE;
+        int min = Integer.MAX_VALUE;
+        int max = Integer.MIN_VALUE;
         for (int i = 0; i < K; i++) {
             if (binWeights[i] < min) {
                 min = binWeights[i];
@@ -47,10 +47,12 @@ public class HromadkyFitness implements FitnessFunction {
             }
         }
 
-        ind.setObjectiveValue(max - min);    // tohle doporucuji zachovat
+        double objective = max - min;
+
+        ind.setObjectiveValue(objective);    // tohle doporucuji zachovat
 
         //sem muzete vlozit vlastni vypocet fitness, muzete samozrejme vyuzit spocitane hmotnosti hromadek
 
-        return 1 / (max - min);
+        return 1 / objective;
     }
 }

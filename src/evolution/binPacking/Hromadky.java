@@ -2,14 +2,19 @@ package evolution.binPacking;
 
 import evolution.DetailsLogger;
 import evolution.EvolutionaryAlgorithm;
+import evolution.FitnessEvaluator;
+import evolution.OrderEvaluator;
 import evolution.Population;
 import evolution.RandomNumberGenerator;
+import evolution.SimpleEvaluator;
 import evolution.StatsLogger;
 import evolution.individuals.Individual;
 import evolution.individuals.IntegerIndividual;
 import evolution.operators.IntegerMutation;
 import evolution.operators.OnePtXOver;
+import evolution.selectors.FairSelector;
 import evolution.selectors.RouletteWheelSelector;
+import evolution.selectors.TournamentSelector;
 
 import java.io.*;
 import java.util.Arrays;
@@ -125,11 +130,17 @@ public class Hromadky {
 
             EvolutionaryAlgorithm ea = new EvolutionaryAlgorithm();
             HromadkyFitness fitness = new HromadkyFitness(weights, K);
-            ea.setFitnessFunction(fitness);
+            //HromadkyFitness fitness = new HromadkyFitnessErr(weights, K);
+            //ea.setFitnessFunction(fitness);
+            //FitnessEvaluator fe = new OrderEvaluator(fitness);
+            FitnessEvaluator fe = new SimpleEvaluator(fitness);
+            ea.setFitnessEvaluator(fe);
             ea.addMatingSelector(new RouletteWheelSelector());
             ea.addOperator(new OnePtXOver(xoverProb));
             ea.addOperator(new IntegerMutation(mutProb, mutProbPerBit));
-            ea.addEnvironmentalSelector(new RouletteWheelSelector());
+            //ea.addEnvironmentalSelector(new RouletteWheelSelector());
+            //ea.addEnvironmentalSelector(new TournamentSelector());
+            ea.addEnvironmentalSelector(new FairSelector());
 
             OutputStreamWriter out = new OutputStreamWriter(new FileOutputStream(fitnessFilePrefix + "." + number));
             OutputStreamWriter progOut = new OutputStreamWriter(new FileOutputStream(objectiveFilePrefix + "." + number));
