@@ -5,4 +5,5 @@
 
 # Output files
 /binPacking/
-/sga/
+/sga/graph.svg
+/sga/logs/
