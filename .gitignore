@@ -1,6 +1,9 @@
-binPacking/
-nbproject/
-build/
-sga/
-build.xml
-manifest.mf
+/nbproject/
+/build/
+/build.xml
+/manifest.mf
+
+# Output files
+/binPacking/
+/sga/graph.svg
+/sga/logs/

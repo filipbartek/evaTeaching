@@ -1,6 +1,10 @@
 package evolution.binPacking;
 
-import evolution.*;
+import evolution.DetailsLogger;
+import evolution.EvolutionaryAlgorithm;
+import evolution.Population;
+import evolution.RandomNumberGenerator;
+import evolution.StatsLogger;
 import evolution.individuals.Individual;
 import evolution.individuals.IntegerIndividual;
 import evolution.operators.IntegerMutation;
@@ -102,6 +106,8 @@ public class Hromadky {
     }
 
     static void run(int number) {
+
+        RandomNumberGenerator.getInstance().reseed(number);
 
         try {
 

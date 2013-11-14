@@ -10,7 +10,7 @@ public class PrisonerDilemma {
     public static void main(String[] args) {
 
         //change this to wherever your .class files are
-        File dir = new File("out/production/evaTeaching/evolution/prisoner/strategies/");
+        File dir = new File("build/classes/evolution/prisoner/strategies/");
 
         String[] stratNames = dir.list();
 
@@ -39,11 +39,13 @@ public class PrisonerDilemma {
         int[] scores = new int[strategies.length];
 
         for (int r = 0; r < 10; r++) {
+            RandomNumberGenerator.getInstance().reseed(r);
+
             for (int i = 0; i < strategies.length; i++) {
                 for (int j = 0; j < strategies.length; j++) {
 
-                    if (i == j)
-                        continue;
+                    //if (i == j)
+                        //continue;
 
                     Strategy s1 = strategies[i];
                     Strategy s2 = strategies[j];
@@ -56,7 +58,8 @@ public class PrisonerDilemma {
                     String str1 = "";
                     String str2 = "";
 
-                    int stop = RandomNumberGenerator.getInstance().nextInt(101) + 200;
+                    //int stop = RandomNumberGenerator.getInstance().nextInt(101) + 200;
+                    int stop = 200;
                     for (int m = 0; m < stop; m++) {
 
                         Move s1Move = s1.nextMove();
