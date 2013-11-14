@@ -1,5 +1,8 @@
-/binPacking/
 /nbproject/
 /build/
 /build.xml
 /manifest.mf
+
+# Output files
+/binPacking/
+/sga/
