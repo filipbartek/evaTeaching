@@ -129,18 +129,21 @@ public class Hromadky {
             pop.createRandomInitialPopulation();
 
             EvolutionaryAlgorithm ea = new EvolutionaryAlgorithm();
-            HromadkyFitness fitness = new HromadkyFitness(weights, K);
-            //HromadkyFitness fitness = new HromadkyFitnessErr(weights, K);
+            //HromadkyFitness fitness = new HromadkyFitness(weights, K);
+            HromadkyFitness fitness = new HromadkyFitnessErr(weights, K);
             //ea.setFitnessFunction(fitness);
             //FitnessEvaluator fe = new OrderEvaluator(fitness);
             FitnessEvaluator fe = new SimpleEvaluator(fitness);
             ea.setFitnessEvaluator(fe);
-            ea.addMatingSelector(new RouletteWheelSelector());
+            //ea.addMatingSelector(new RouletteWheelSelector());
+            ea.addMatingSelector(new TournamentSelector());
+            //ea.addMatingSelector(new FairSelector());
             ea.addOperator(new OnePtXOver(xoverProb));
             ea.addOperator(new IntegerMutation(mutProb, mutProbPerBit));
             //ea.addEnvironmentalSelector(new RouletteWheelSelector());
-            //ea.addEnvironmentalSelector(new TournamentSelector());
-            ea.addEnvironmentalSelector(new FairSelector());
+            ea.addEnvironmentalSelector(new TournamentSelector());
+            //ea.addEnvironmentalSelector(new FairSelector());
+            //ea.setElite(0.01);
 
             OutputStreamWriter out = new OutputStreamWriter(new FileOutputStream(fitnessFilePrefix + "." + number));
             OutputStreamWriter progOut = new OutputStreamWriter(new FileOutputStream(objectiveFilePrefix + "." + number));
