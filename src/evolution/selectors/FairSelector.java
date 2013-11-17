@@ -3,12 +3,14 @@ package evolution.selectors;
 import evolution.Population;
 import evolution.RandomNumberGenerator;
 import evolution.individuals.Individual;
+import java.util.HashSet;
 import java.util.Map;
 import java.util.NavigableMap;
+import java.util.Set;
 import java.util.TreeMap;
 
 /**
- * @author Martin Pilat
+ * @author Filip Bartek
  */
 public class FairSelector implements Selector {
 
@@ -16,33 +18,49 @@ public class FairSelector implements Selector {
 
     public void select(int howMany, Population from, Population to) {
 
+        assert(to.getPopulationSize() == 0);
+        assert(howMany >= 0);
+
+        if (howMany == 0) return;
+
         double fitnessSum = 0.0;
 
-        NavigableMap<Double, Integer> intermediate = new TreeMap<Double, Integer>();
+        // <fitness, <index in `from`>>
+        NavigableMap<Double, Set<Integer>> heap = new TreeMap<Double, Set<Integer>>();
 
+        // Fill `heap` with fitness values and indexes
         for (int i = 0; i < from.getPopulationSize(); i++) {
             double fitness = from.get(i).getFitnessValue();
             fitnessSum += fitness;
-            intermediate.put(fitness, i);
+            Set<Integer> indexes = heap.get(fitness);
+            if (indexes == null) {
+                indexes = new HashSet<Integer>();
+            }
+            indexes.add(i);
+            heap.put(fitness, indexes);
         }
 
         double step = fitnessSum / howMany;
 
-        for (int i = 0; i < howMany; i++) {
-
-            if (intermediate.isEmpty()) {
-                break;
+        // Pull the `howMany` heaviest individuals from the heap
+        int i = 0;
+        while (!heap.isEmpty()) {
+            Map.Entry<Double, Set<Integer>> bestEntry = heap.pollLastEntry();
+            Set<Integer> indexes = bestEntry.getValue();
+            for (Integer index : indexes) {
+                to.add((Individual) from.get(index).clone());
+                ++i;
+                if (i >= howMany) break;
             }
-            Map.Entry<Double, Integer> bestEntry = intermediate.pollLastEntry();
+            if (i >= howMany) break;
             Double bestWeight = bestEntry.getKey();
-            Integer j = bestEntry.getValue();
-            to.add((Individual) from.get(j).clone());
             Double newWeight = bestWeight - step;
             if (newWeight > 0) {
-                intermediate.put(newWeight, j);
+                heap.put(newWeight, indexes);
             }
-
         }
+
+        assert(i == howMany);
 
         assert(to.getPopulationSize() == howMany);
 
