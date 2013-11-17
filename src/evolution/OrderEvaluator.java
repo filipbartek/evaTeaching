@@ -17,6 +17,7 @@ public class OrderEvaluator implements FitnessEvaluator {
 
     public void evaluate(Population pop) {
 
+        // <fitness, <index in `pop`>>
         NavigableMap<Double, Set<Integer>> heap =
                 new TreeMap<Double, Set<Integer>>();
 
@@ -30,14 +31,15 @@ public class OrderEvaluator implements FitnessEvaluator {
             heap.put(value, indexes);
         }
 
-        int j = 1;
-
+        // Lowest result fitness is 1
+        int j = 0;
         for (Set<Integer> indexes : heap.values()) {
             for (Integer index : indexes) {
                 pop.get(index).setFitnessValue(j);
                 ++j;
             }
         }
+        assert(j == pop.getPopulationSize());
 
     }
 
