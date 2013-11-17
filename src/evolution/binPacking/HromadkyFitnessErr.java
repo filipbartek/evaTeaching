@@ -23,7 +23,7 @@ public class HromadkyFitnessErr extends HromadkyFitness {
 
         int[] binWeights = getBinWeights(ind);
 
-        Double opt = getWeightsSum() / K;
+        Double avg = getWeightsSum() / K;
         Double err = 0.0;
 
         double min = Integer.MAX_VALUE;
@@ -35,13 +35,15 @@ public class HromadkyFitnessErr extends HromadkyFitness {
             if (binWeights[i] > max) {
                 max = binWeights[i];
             }
-            //err = err + Math.abs(opt - binWeights[i]);
-            err = err + Math.pow(opt - binWeights[i], 2);
-            // TODO: Finish!
+            err += Math.pow(avg - binWeights[i], 2);
+            //err += Math.abs(avg - binWeights[i]);
         }
+
+        err /= K;
+        err = Math.sqrt(err); // standard deviation
 
         ind.setObjectiveValue(max - min);    // tohle doporucuji zachovat
 
-        return 1 / err;
+        return avg / err;
     }
 }
