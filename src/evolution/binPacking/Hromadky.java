@@ -1,11 +1,23 @@
 package evolution.binPacking;
 
-import evolution.*;
+import evolution.DetailsLogger;
+import evolution.EvolutionaryAlgorithm;
+import evolution.FitnessEvaluator;
+import evolution.OrderEvaluator;
+import evolution.Population;
+import evolution.RandomNumberGenerator;
+import evolution.SimpleEvaluator;
+import evolution.StatsLogger;
 import evolution.individuals.Individual;
 import evolution.individuals.IntegerIndividual;
+import evolution.operators.HromadkyMutation;
 import evolution.operators.IntegerMutation;
 import evolution.operators.OnePtXOver;
+import evolution.operators.UniformXOver;
+import evolution.selectors.FairSelector;
 import evolution.selectors.RouletteWheelSelector;
+import evolution.selectors.SusSelector;
+import evolution.selectors.TournamentSelector;
 
 import java.io.*;
 import java.util.Arrays;
@@ -103,6 +115,8 @@ public class Hromadky {
 
     static void run(int number) {
 
+        RandomNumberGenerator.getInstance().reseed(number);
+
         try {
 
             DetailsLogger.startNewLog(detailsLogPrefix + "." + number + ".xml");
@@ -119,11 +133,24 @@ public class Hromadky {
 
             EvolutionaryAlgorithm ea = new EvolutionaryAlgorithm();
             HromadkyFitness fitness = new HromadkyFitness(weights, K);
-            ea.setFitnessFunction(fitness);
+            //HromadkyFitness fitness = new HromadkyFitnessErr(weights, K);
+            //ea.setFitnessFunction(fitness);
+            FitnessEvaluator fe = new SimpleEvaluator(fitness);
+            //FitnessEvaluator fe = new OrderEvaluator(fitness);
+            ea.setFitnessEvaluator(fe);
             ea.addMatingSelector(new RouletteWheelSelector());
+            //ea.addMatingSelector(new TournamentSelector());
+            //ea.addMatingSelector(new FairSelector());
+            //ea.addMatingSelector(new SusSelector());
             ea.addOperator(new OnePtXOver(xoverProb));
+            //ea.addOperator(new UniformXOver(xoverProb, 0.5));
             ea.addOperator(new IntegerMutation(mutProb, mutProbPerBit));
+            //ea.addOperator(new HromadkyMutation(mutProb, mutProbPerBit, weights, K));
             ea.addEnvironmentalSelector(new RouletteWheelSelector());
+            //ea.addEnvironmentalSelector(new TournamentSelector());
+            //ea.addEnvironmentalSelector(new FairSelector());
+            //ea.addEnvironmentalSelector(new SusSelector());
+            ea.setElite(0.02);
 
             OutputStreamWriter out = new OutputStreamWriter(new FileOutputStream(fitnessFilePrefix + "." + number));
             OutputStreamWriter progOut = new OutputStreamWriter(new FileOutputStream(objectiveFilePrefix + "." + number));

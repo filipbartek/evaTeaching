@@ -1,7 +1,12 @@
-binPacking/
-nbproject/
-build/
-real/
-sga/
-build.xml
-manifest.mf
+/nbproject/
+/build/
+/build.xml
+/manifest.mf
+
+# binPacking
+/binPacking/logs/
+/binPacking/graph.svg
+
+# sga
+/sga/logs/
+/sga/graph.svg

@@ -92,6 +92,7 @@ public class Main {
         EvolutionaryAlgorithm ea = new EvolutionaryAlgorithm();
 
         ea.setFitnessFunction(new ExampleFitnessFunction());
+        //ea.setFitnessFunction(new FitnessFunctionAlternate());
 
         ea.addMatingSelector(new RouletteWheelSelector());
         ea.addOperator(new OnePtXOver(xoverProb));

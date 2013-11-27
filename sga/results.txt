@@ -1,0 +1,5 @@
+Zkusil jsem postupně zvlášť zvětšit velikost populace (z 50 na 500), počet generací (z 50 na 500) a délku jedince (z 25 na 50).
+
+Z grafu jde vidět, že zvětšení populace mělo lepší výsledek než zvětšení počtu generací počínaje 3500 vyhodnoceními fitness.
+
+Prodloužení jedince lehce zhoršilo míru konvergence v prvních 50 generacích. Kratší jedinci dospěli k populaci s průměrně 21.9 jedničkami na jedince, což je více než polovina z 38.5 jedniček dosažených v evoluci dlouhých jedinců. Poměr nejlepších nalezených je podobný (24/25 proti 42/50).
