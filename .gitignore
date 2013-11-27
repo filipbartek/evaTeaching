@@ -10,3 +10,6 @@
 # sga
 /sga/logs/
 /sga/graph.svg
+
+# real
+/real/
