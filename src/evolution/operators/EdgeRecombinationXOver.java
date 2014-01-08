@@ -4,6 +4,7 @@ import evolution.Population;
 import evolution.RandomNumberGenerator;
 import evolution.individuals.ArrayIndividual;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Dictionary;
 import java.util.HashSet;
 import java.util.Hashtable;
@@ -29,64 +30,101 @@ public class EdgeRecombinationXOver implements Operator {
 
         int size = parents.getPopulationSize();
 
+        ArrayIndividual[] p = new ArrayIndividual[2];
+        ArrayIndividual[] o = new ArrayIndividual[2];
+
         for (int i = 0; i < size / 2; i++) {
-            ArrayIndividual[] p = new ArrayIndividual[2];
+
             p[0] = (ArrayIndividual) parents.get(2*i);
             p[1] = (ArrayIndividual) parents.get(2*i + 1);
 
-            assert(p[0].length() == p[1].length());
-            int length = p[0].length();
+            o[0] = p[0];
+            o[1] = p[1];
+            
+            if (rng.nextDouble() < xOverProb) {
+                assert(p[0].length() == p[1].length());
+                int length = p[0].length();
 
-            // datova struktura: pole mnozin celych cisel
-            Map<Object, Set<Object>> edges = new Hashtable<Object, Set<Object>>();
+                // datova struktura: pole mnozin celych cisel
+                Map<Object, Set<Object>> edges = new Hashtable<Object, Set<Object>>();
 
-            for (int pi = 0; pi < 2; pi++) {
-                Object elemPrev;
-                Object elemCur = p[pi].get(length - 1); // last element
-                Object elemNext = p[pi].get(0); // first element
+                for (int pi = 0; pi < 2; pi++) {
+                    Object elemPrev;
+                    Object elemCur = p[pi].get(length - 1); // last element
+                    Object elemNext = p[pi].get(0); // first element
+                    for (int elemi = 0; elemi < length; elemi++) {
+                        elemPrev = elemCur;
+                        elemCur = elemNext;
+                        if (elemi + 1 >= length) {
+                            elemNext = p[pi].get(0); // wrap around
+                        } else {
+                            elemNext = p[pi].get(elemi + 1);
+                        }
+                        if (edges.get(elemCur) == null) {
+                            edges.put(elemCur, new HashSet<Object>());
+                        }
+                        edges.get(elemCur).add(elemPrev);
+                        edges.get(elemCur).add(elemNext);
+                    }
+                }
+
+                ArrayIndividual combined = (ArrayIndividual) p[0].clone(); // clone parent to respect class
+
+                Collection<Set<Object>> values = edges.values();
+
+                boolean failure = false;
+
+                Object elemCur = p[0].get(0);
                 for (int elemi = 0; elemi < length; elemi++) {
-                    elemPrev = elemCur;
-                    elemCur = elemNext;
-                    if (elemi + 1 > length) {
-                        elemNext = p[pi].get(0); // wrap around
-                    } else {
-                        elemNext = p[pi].get(elemi + 1);
+                    // remove references from edges
+                    for (Set<Object> value : values) {
+                        value.remove(elemCur);
                     }
-                    if (edges.get(elemCur) == null) {
-                        edges.put(elemCur, new HashSet<Object>());
+
+                    combined.set(elemi, elemCur);
+
+                    if (elemi >= length - 1) {
+                        break;
                     }
-                    edges.get(elemCur).add(elemPrev);
-                    edges.get(elemCur).add(elemNext);
+
+                    // find minimal degree
+                    int sizeMin = Integer.MAX_VALUE;
+                    for (Object elemNext : edges.get(elemCur)) {
+                        int sizeCur = edges.get(elemNext).size();
+                        if (sizeCur < sizeMin) {
+                            sizeMin = sizeCur;
+                        }
+                    }
+
+                    // get elems with minimal degree
+                    Set<Object> candidates = new HashSet<Object>();
+                    for (Object elemNext : edges.get(elemCur)) {
+                        int sizeCur = edges.get(elemNext).size();
+                        if (sizeCur == sizeMin) {
+                            candidates.add(elemNext);
+                        }
+                    }
+
+                    if (candidates.size() <= 0) {
+                        failure = true;
+                        break;
+                    }
+
+                    // pick a random candidate
+                    int candidatei = rng.nextInt(candidates.size());
+                    elemCur = candidates.toArray()[candidatei];
+                }
+
+                if (!failure) {
+                    o[0] = combined;
+                    o[1] = combined;
+                    //System.out.println("-");
+                } else {
+                    //System.out.println("+");
                 }
             }
-
-            ArrayIndividual o = (ArrayIndividual) p[0].clone(); // clone parent to respect class
-
-            Object elemCur = p[0].get(0);
-            for (int elemi = 0; elemi < length; elemi++) {
-                o.set(elemi, elemCur);
-
-                // find minimal degree
-                int sizeMin = Integer.MAX_VALUE;
-                for (Object elemNext : edges.get(elemCur)) {
-                    int sizeCur = edges.get(elemNext).size();
-                    if (sizeCur < sizeMin) {
-                        sizeMin = sizeCur;
-                    }
-                }
-
-                // get elems with minimal degree
-                Set<Object> candidates = new HashSet<Object>();
-                for (Object elemNext : edges.get(elemCur)) {
-                    int sizeCur = edges.get(elemNext).size();
-                    if (sizeCur == sizeMin) {
-                        candidates.add(elemNext);
-                    }
-                }
-            }
-
-            offspring.add(o);
-            offspring.add(o);
+            offspring.add(o[0]);
+            offspring.add(o[1]);
         }
 
     }
