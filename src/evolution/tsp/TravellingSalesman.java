@@ -2,6 +2,7 @@ package evolution.tsp;
 
 import evolution.*;
 import evolution.individuals.IntegerIndividual;
+import evolution.operators.EdgeRecombinationXOver;
 import evolution.operators.SwappingMutationOperator;
 import evolution.selectors.TournamentSelector;
 
@@ -109,6 +110,7 @@ public class TravellingSalesman {
             EvolutionaryAlgorithm ea = new EvolutionaryAlgorithm();
             ea.setFitnessFunction(new TSPFitness(coords));
             ea.addOperator(new SwappingMutationOperator(mutProb, mutProbPerBit));
+            ea.addOperator(new EdgeRecombinationXOver(xoverProb));
             ea.addEnvironmentalSelector(new TournamentSelector());
             ea.setElite(eliteSize);
 
